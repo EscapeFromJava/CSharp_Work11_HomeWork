@@ -1,19 +1,14 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.ComponentModel;
-using System.Linq;
-using System.Runtime.Remoting.Messaging;
-using System.Text;
-using System.Threading.Tasks;
 using Math = System.Math;
 
 namespace CSharp_Work11_HomeWork
 {
     class Program
     {
-        static void Main(string[] args)
+        static void Main()
         {
-            List<Ifigure> listFigure = new List<Ifigure>();
+            List<IFigure> listFigure = new List<IFigure>();
 
             Cube c1 = new Cube(30);
             Cube c2 = new Cube(15);
@@ -27,7 +22,6 @@ namespace CSharp_Work11_HomeWork
             Square s4 = new Square(5);
             Square s5 = new Square(14);
 
-            
             listFigure.Add(c1);
             listFigure.Add(s1);
             listFigure.Add(c2);
@@ -41,48 +35,46 @@ namespace CSharp_Work11_HomeWork
 
             Console.WriteLine("==== до сортировки ====");
 
-            for (int i = 0; i < listFigure.Count; i++)
-                listFigure[i].Print();
+            foreach (var el in listFigure)
+                el.Print();
 
             Console.WriteLine("==== после сортировки ====");
 
             listFigure.Sort();
 
-            for (int i = 0; i < listFigure.Count; i++)
-                listFigure[i].Print();
+            foreach (var el in listFigure)
+                el.Print();
 
             Console.ReadKey();
         }
     }
 
-    interface Ifigure
+    interface IFigure
     {
-        double Edge { set; }
+        //double Edge { set; }
         double Diagonal { get; }
         void Print();
     }
 
-    struct Cube : Ifigure, IComparable
+    struct Cube : IFigure, IComparable
     {
-        private string name;
+        private readonly string _name;
         public Cube(double x)
         {
             Edge = x;
-            name = "Cube";
+            _name = "Cube";
         }
         public double Edge { get; set; }
-        public double Diagonal
-        {
-            get { return Math.Sqrt(Edge * Edge + Edge * Edge); }
-        }
+        public double Diagonal => Math.Sqrt(Edge * Edge + Edge * Edge);
+
         public void Print()
         {
-            Console.WriteLine("{0} Диагональ = {1:f2}, Площадь = {2:f2}, Объем = {3:f2}", name, Diagonal, 6 * Edge * Edge, Edge * Edge * Edge);
+            Console.WriteLine("{0} Диагональ = {1:f2}, Площадь = {2:f2}, Объем = {3:f2}", _name, Diagonal, 6 * Edge * Edge, Edge * Edge * Edge);
         }
 
         public int CompareTo(object obj)
         {
-            Ifigure c = (Ifigure)obj;
+            IFigure c = (IFigure)obj;
             if (Diagonal > c.Diagonal)
                 return 1;
             else
@@ -90,27 +82,25 @@ namespace CSharp_Work11_HomeWork
         }
     }
 
-    struct Square : Ifigure, IComparable
+    struct Square : IFigure, IComparable
     {
-        private string name;
+        private readonly string _name;
         public Square(double x)
         {
             Edge = x;
-            name = "Square";
+            _name = "Square";
         }
         public double Edge { get; set; }
-        public double Diagonal
-        {
-            get { return Math.Sqrt(Edge * Edge + Edge * Edge); }
-        }
+        public double Diagonal => Math.Sqrt(Edge * Edge + Edge * Edge);
+
         public void Print()
         {
-            Console.WriteLine("{0} Диагональ = {1:f2}, Площадь = {2:f2}", name, Diagonal, Edge * Edge);
+            Console.WriteLine("{0} Диагональ = {1:f2}, Площадь = {2:f2}", _name, Diagonal, Edge * Edge);
         }
 
         public int CompareTo(object obj)
         {
-            Ifigure s = (Ifigure) obj;
+            IFigure s = (IFigure) obj;
             if (Diagonal > s.Diagonal)
                 return 1;
             else
